@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 #
@@ -357,6 +358,18 @@ def get_information(redfishobj):
                 )
             )
 
+         if "#Bios." in instance.get("@odata.type", ""):
+            bios = redfishobj.get(instance["@odata.id"]).dict
+            if bios["Name"] == "BIOS Current Settings":
+                sys.stdout.write("<<<ilo_api_bios:sep(124)>>>\n")
+                sys.stdout.write(
+                    "Boot Mode|%s\nSR-IOV|%s\nSub-Numa Clustering|%s\n"
+                     % (
+                         bios["Attributes"]["BootMode"],
+                         bios["Attributes"]["Sriov"],
+                         bios["Attributes"]["SubNumaClustering"],
+                     )
+                )
 
 def parse_arguments(argv: Sequence[str] | None) -> Args:
     parser = create_default_argument_parser(description=__doc__)
