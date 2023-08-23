@@ -37,17 +37,17 @@ def check_ilo_api_bios(item: str, section) -> CheckResult:
     data = section.get(item)
     if data:
         setting, value = data
-        state = State(0)
+        state = State(1)
         match setting:
             case "Boot Mode":
-                if value != "Uefi":
-                    state = State(1)
+                if value == "Uefi":
+                    state = State(0)
             case "SR-IOV":
-                if value != "Disabled":
-                    state = State(1)
-            case "Sub-Numa":
-                if value != "Disabled":
-                    state = State(1)
+                if value == "Disabled":
+                    state = State(0)
+            case "Sub-Numa Clustering":
+                if value == "Disabled":
+                    state = State(0)
         yield Result(
             state=state,
             summary=f"{setting}: {value}"
